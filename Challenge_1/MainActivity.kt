@@ -1,7 +1,11 @@
 package com.example.challenge_1
 
+import android.widget.Button
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -9,18 +13,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import com.example.jokes_2.ui.theme.Challenge_1Theme
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import com.example.challenge_1.ui.theme.Challenge_1Theme
 
 class MainActivity : ComponentActivity() {
 
@@ -33,7 +38,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    }
+}
 
 data class JokeModel(
 
@@ -106,7 +111,7 @@ fun MyApp(){
                     "Joke Tag",
                     "MyApp: You clicked joke number $it"
                 )
-                jokes[it] = JokeModel(it, jokes[it].question, jokes[it].punch_line, !jokes[it].answer_is_visible)
+                jokes[it] = JokeModel(it, jokes[it].question, jokes[it].punch_line, jokes[it].perks, !jokes[it].answer_is_visible)
             }
 
             }
@@ -122,7 +127,7 @@ fun joke_1(joke: JokeModel, changeVisability: (id: Int) -> Unit) {
     Column() {
 
         Text(modifier = Modifier.padding(10.dp),
-        text = "Joke number: ${joke.id}")
+            text = "Joke number: ${joke.id}")
 
         Text(
             modifier = Modifier.padding(10.dp).clickable {
@@ -141,24 +146,24 @@ fun joke_1(joke: JokeModel, changeVisability: (id: Int) -> Unit) {
                 text = joke.punch_line
             )
             for(perk in joke.perks) {
-            
-              Text(
-              
-                modifier = Modifier.padding(10.do),
-                text = perk
-              
-              )
-            
+
+                Text(
+
+                    modifier = Modifier.padding(10.dp),
+                    text = perk
+
+                )
+
             }
             Button(onClick = {/* YES, KILL! */}){
-            
-              Text(
-              
-                modifier = Modifier.padding(10.dp),
-                text = "Subscribe!"
-              
-              )
-              
+
+                Text(
+
+                    modifier = Modifier.padding(10.dp),
+                    text = "Subscribe!"
+
+                )
+
             }
 
         }
@@ -170,16 +175,14 @@ fun joke_1(joke: JokeModel, changeVisability: (id: Int) -> Unit) {
 
 @Composable
 fun joke_2 (joke: JokeModel, context: Context){
-        Text(text = joke.question,
-            Modifier
-                .padding(20.dp)
-                .clickable {
-                    Toast
-                        .makeText(context, joke.punch_line, Toast.LENGTH_LONG)
-                        .show()
-                })
-        Divider()
-    }
-
-
+    Text(text = joke.question,
+        Modifier
+            .padding(20.dp)
+            .clickable {
+                Toast
+                    .makeText(context, joke.punch_line, Toast.LENGTH_LONG)
+                    .show()
+            })
+    Divider()
+}
 
