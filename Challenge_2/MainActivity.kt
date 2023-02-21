@@ -1,23 +1,17 @@
-package com.example.distanceconvert
+package com.example.challenge_2
+
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.distanceconvert.ui.theme.DistanceConvertTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,18 +19,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tempconvert.ViewModelForTemp
-
+import com.example.challenge_2.ui.theme.Challenge_2Theme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DistanceConvertTheme {
+            Challenge_2Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background) {
+                    color = MaterialTheme.colors.background
+                ) {
                     MyApp()
                 }
             }
@@ -45,25 +39,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    DistanceConvertTheme {
-        Greeting("Android")
-    }
-}
-
-@Composable
 fun DropdownDemo(isInput: Boolean) {
-    var viewModel: ViewModelForTemp = viewModel()
+    var viewModel: TempViewModel = viewModel()
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Meters", "Kilometers", "Centimeter", "Feet", "Inches", "Miles", "Parsec")
     var selectedIndex by remember { mutableStateOf(0) }
-    Box() {
+    Box {
         Text(items[selectedIndex],modifier = Modifier.clickable(onClick = { expanded = true }).background(
             Color.White), fontSize = 30.sp)
         DropdownMenu(
@@ -77,9 +58,9 @@ fun DropdownDemo(isInput: Boolean) {
                     selectedIndex = index
                     expanded = false
                     if(isInput){
-                        viewModel.getMeasureIn(selectedIndex)
+                        viewModel.getM1(selectedIndex)
                     }else{
-                        viewModel.getMeasureOut(selectedIndex)
+                        viewModel.getM2(selectedIndex)
                     }
                 }) {
                     Text(text = s, fontSize = 20.sp)
@@ -91,20 +72,22 @@ fun DropdownDemo(isInput: Boolean) {
 
 @Composable
 fun MyApp() {
-    var viewModel: ViewModelForTemp = viewModel()
+
+    var viewModel: TempViewModel = viewModel()
 
     MainScreen(
-        isFah = viewModel.isFah,
-        result = viewModel.convertDist,
-        convertDist = { viewModel.convert(it)},
-        doToggle = { viewModel.doSwitchToggle()}
-    )
+        isF = viewModel.isF,
+        result = viewModel.convertedDist,
+        convertDistance = { viewModel.convert(it)}
+    ) { viewModel.doSwitchToggle() }
 }
 
 @Composable
-fun MainScreen(isFah: Boolean, result: Double,
-               convertDist: (String) -> Unit,
-               doToggle: () -> Unit) {
+fun MainScreen(
+    isF: Boolean, result: Double,
+    convertDistance: (String) -> Unit,
+    doToggle: () -> Unit)
+{
 
     var inputTextState by remember {
         mutableStateOf("")
@@ -124,24 +107,24 @@ fun MainScreen(isFah: Boolean, result: Double,
 
         Card(elevation = 10.dp) {
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(10.dp)) {
+                modifier = Modifier.padding(10.dp)){
                 OutlinedTextField(
                     value = inputTextState,
-                    onValueChange = { onTextChange(it) },
+                    onValueChange = { onTextChange(it)},
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
                     ),
                     singleLine = true,
-                    label = { Text("Enter distance") },
+                    label = { Text("Enter distance to convert")},
                     modifier = Modifier.padding(12.dp),
                     textStyle = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 32.sp
-                    ),
-
                     )
+                )
             }
         }
+
         Card(elevation = 10.dp) {
             DropdownDemo(true)
         }
@@ -155,10 +138,10 @@ fun MainScreen(isFah: Boolean, result: Double,
             DropdownDemo(false)
         }
 
-        Button(onClick = {convertDist(inputTextState)},
+        Button(onClick = {convertDistance(inputTextState)},
             Modifier.padding(20.dp)
         ) {
-            Text(text = "Convert")
+            Text(text = "Convert Distance")
 
         }
     }
