@@ -1,59 +1,64 @@
-package com.example.tempconvert
+package com.example.challenge_2
 
-import android.icu.util.Measure
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlin.math.roundToInt
 
-class ViewModelForTemp : ViewModel() {
-    var isFah by mutableStateOf(true)
 
-    var convertTemp by mutableStateOf("")
+class TempViewModel : ViewModel() {
 
-    var measureIn by mutableStateOf(0)
-    var measureOut by mutableStateOf(0)
+    var isF by mutableStateOf(true)
 
-    val distConvert = listOf(1.0, 1000.0, .01, 0.3048, 0.0254, 1609.34, 299792458.0 )
-    var convertDist by mutableStateOf(.0)
-
+    var convertedTemp by mutableStateOf("")
+    var m1 by mutableStateOf(0)
+    var m2 by mutableStateOf(0)
+    val distList = listOf(1.0, 1000.0, .01, 0.3048, 0.0254, 1609.34, 299792458.0 )
+    var convertedDist by mutableStateOf(.0)
 
     fun doSwitchToggle(){
-        isFah = !isFah
+
+        isF != isF
+
     }
 
-    fun calculateConvertion(inputValue: String){
+    fun calculateConversion(inputValue: String){
 
-        try{
+        convertedTemp = try{
+
             val temp = inputValue.toInt()
 
-            if (isFah){
-                convertTemp = ((temp - 32) * 5/9.0).roundToInt().toString() + "\u2103"
-            }else{
-                convertTemp = ((temp * 9/5f) + 32).roundToInt().toString() + "\u2109"
+            if(isF){
+                ((temp - 32) * 5/9.0).roundToInt().toString() + "\u2103"
+            } else {
+                ((temp * 9/5f) + 32).roundToInt().toString() + "\u2109"
             }
+
         } catch (e: Exception){
-            convertTemp = "Error"
+
+            "Error"
+
         }
 
     }
 
-    fun getMeasureIn(m: Int){
-        measureIn = m
+    fun getM1(m: Int){
+        m1 = m
     }
 
-    fun getMeasureOut(m: Int){
-        measureOut = m
+    fun getM2(m: Int){
+        m2 = m
     }
 
     fun convert(inputValue: String){
-        try{
+        convertedDist = try{
             val dist = inputValue.toDouble()
-            convertDist = dist * (distConvert[measureIn] / distConvert[measureOut])
+            dist * (distList[m1] / distList[m2])
 
         } catch (e: Exception){
-            convertDist = -1.0
+            -1.0
         }
     }
+
 }
