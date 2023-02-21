@@ -1,4 +1,4 @@
-package com.example.tempconvert
+package com.example.temperature_conversion
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,21 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tempconvert.ui.theme.TempConvertTheme
+import com.example.temperature_conversion.ui.theme.Temperature_ConversionTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TempConvertTheme {
+            Temperature_ConversionTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background) {
+                    color = MaterialTheme.colors.background
+                ) {
                     MyApp()
                 }
             }
@@ -39,20 +39,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp() {
-    var viewModel: ViewModelForTemp = viewModel()
+
+    var viewModel: TempViewModel = viewModel()
 
     MainScreen(
-        isFah = viewModel.isFah,
-        result = viewModel.convertTemp,
-        convertTemp = { viewModel.calculateConvertion(it)},
+        isF = viewModel.isF,
+        result = viewModel.convertedTemp,
+        convertTemp = { viewModel.calculateConversion(it)},
         doToggle = { viewModel.doSwitchToggle()}
     )
 }
 
 @Composable
-fun MainScreen(isFah: Boolean, result: String,
-               convertTemp: (String) -> Unit,
-               doToggle: () -> Unit) {
+fun MainScreen(
+    isF: Boolean, result: String,
+    convertTemp: (String) -> Unit,
+    doToggle: () -> Unit)
+{
 
     var inputTextState by remember {
         mutableStateOf("")
@@ -74,7 +77,7 @@ fun MainScreen(isFah: Boolean, result: String,
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(10.dp)){
                 Switch(
-                    checked = isFah,
+                    checked = isF,
                     onCheckedChange = {
                         doToggle()
                     }
@@ -93,7 +96,7 @@ fun MainScreen(isFah: Boolean, result: String,
                         fontSize = 32.sp
                     ),
                     trailingIcon = {
-                        if(isFah){
+                        if(isF){
                             Text("\u2109", style = MaterialTheme.typography.h4)
                         } else {
                             Text("\u2103", style = MaterialTheme.typography.h4)
@@ -111,12 +114,12 @@ fun MainScreen(isFah: Boolean, result: String,
         )
 
         Button(onClick = {convertTemp(inputTextState)},
-                Modifier.padding(20.dp)
-            ) {
-            if(isFah){
-                Text(text = "Convert to C")
+            Modifier.padding(20.dp)
+        ) {
+            if(isF){
+                Text(text = "Convert to Celsius")
             }else{
-                Text(text = "Convert to F")
+                Text(text = "Convert to Fahrenheit")
             }
 
         }
