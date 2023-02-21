@@ -46,12 +46,12 @@ fun DropdownDemo(isInput: Boolean) {
     var selectedIndex by remember { mutableStateOf(0) }
     Box {
         Text(items[selectedIndex],modifier = Modifier.clickable(onClick = { expanded = true }).background(
-            Color.White), fontSize = 30.sp)
+            Color.LightGrey), fontSize = 30.sp)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxWidth().background(
-                Color.White)
+                Color.LightGrey)
         ) {
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(onClick = {
